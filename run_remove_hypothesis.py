@@ -118,7 +118,8 @@ def main():
             prepare_train_dataset,
             batched=True,
             num_proc=NUM_PREPROCESSING_WORKERS,
-            remove_columns=train_dataset.column_names
+           # remove_columns=train_dataset.column_names
+            remove_columns=['hypothesis', 'label']
         )
     if training_args.do_eval:
         eval_dataset = dataset[eval_split]
@@ -128,7 +129,8 @@ def main():
             prepare_eval_dataset,
             batched=True,
             num_proc=NUM_PREPROCESSING_WORKERS,
-            remove_columns=eval_dataset.column_names
+            #remove_columns=eval_dataset.column_names
+            remove_columns=['hypothesis', 'label']
         )
 
     # Select the training configuration
