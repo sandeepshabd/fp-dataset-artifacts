@@ -28,6 +28,19 @@ def main():
     #     Where to put the trained model checkpoint(s) and any eval predictions.
     #     *This argument is required*.
 
+    argp.add_argument('--num_train_epochs', type=int,
+                      default=3,
+                      help="""T<int, default=8>
+    #     This is the training batch size.
+    #     If you're running on GPU, you should try to make this as large as you can without getting CUDA out-of-memory errors.
+    #     For reference, with --max_length=128 and the default ELECTRA-small model, a batch size of 32 should fit in 4gb of GPU memory..""")
+
+    argp.add_argument('--per_device_train_batch_size', type=int,
+                      default=254,
+                      help="""T<int, default=8>
+    #     This is the training batch size.
+    #     If you're running on GPU, you should try to make this as large as you can without getting CUDA out-of-memory errors.
+    #     For reference, with --max_length=128 and the default ELECTRA-small model, a batch size of 32 should fit in 4gb of GPU memory..""")
     argp.add_argument('--model', type=str,
                       default='google/electra-small-discriminator',
                       help="""This argument specifies the base model to fine-tune.
