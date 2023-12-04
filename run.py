@@ -70,6 +70,9 @@ def main():
         eval_split = 'validation_matched' if dataset_id == ('glue', 'mnli') else 'validation'
         # Load the raw data
         dataset = datasets.load_dataset(*dataset_id)
+        print("------------dataset display ---0----")
+        print(dataset)
+        
     
     # NLI models need to have the output label count specified (label 0 is "entailed", 1 is "neutral", and 2 is "contradiction")
     task_kwargs = {'num_labels': 3} if args.task == 'nli' else {}
@@ -97,6 +100,8 @@ def main():
     if dataset_id == ('snli',):
         # remove SNLI examples with no label
         dataset = dataset.filter(lambda ex: ex['label'] != -1)
+        print("------------dataset display ----1---")
+        print(dataset)
     
     train_dataset = None
     eval_dataset = None
@@ -106,6 +111,8 @@ def main():
         train_dataset = dataset['train']
         if args.max_train_samples:
             train_dataset = train_dataset.select(range(args.max_train_samples))
+        print("------------dataset display --2-----")
+        print(dataset)
         train_dataset_featurized = train_dataset.map(
             prepare_train_dataset,
             batched=True,
