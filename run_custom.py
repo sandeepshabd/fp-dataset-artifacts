@@ -58,36 +58,6 @@ def answer_question(tokenizer,question, context, model):
     answer = tokenizer.convert_tokens_to_string(tokenizer.convert_ids_to_tokens(input_ids[answer_start:answer_end]))
 
     return answer
-
-
-
-# Function to answer questions
-def answer_question(tokenizer,question, context, model):
-    # Encode the question-context pair
-    inputs = tokenizer.encode_plus(question, context, add_special_tokens=True, return_tensors="pt")
-    input_ids = inputs["input_ids"].tolist()[0]
-
-    # Get model predictions
-    with torch.no_grad():
-        outputs = model(**inputs)
-        answer_start_scores = outputs.start_logits
-        answer_end_scores = outputs.end_logits
-
-    # Find the tokens with the highest `start` and `end` scores
-    answer_start = torch.argmax(answer_start_scores)
-    answer_end = torch.argmax(answer_end_scores) + 1
-
-    # Convert the tokens to the answer string
-    answer = tokenizer.convert_tokens_to_string(tokenizer.convert_ids_to_tokens(input_ids[answer_start:answer_end]))
-
-    return answer
-
-# Example context and set of questions
-
-    
-def main():
-        argp = HfArgumentParser(TrainingArguments)
-    
-        
+       
 if __name__ == "__main__":
     main()
