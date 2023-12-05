@@ -1,6 +1,7 @@
 from transformers import AutoTokenizer, AutoModelForQuestionAnswering
 import torch
 import argparse
+import json
 import datasets
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, \
     AutoModelForQuestionAnswering, Trainer, TrainingArguments, HfArgumentParser
@@ -16,23 +17,36 @@ def main():
                       help="""This argument specifies the base model to fine-tune.
         This should either be a HuggingFace model ID (see https://huggingface.co/models)
         or a path to a saved model checkpoint (a folder containing config.json and pytorch_model.bin).""")
+    
+    parser.add_argument('--questions_path', type=str,
+                      default='squad_questions.json',
+                      help="""This argument specifies the base model to fine-tune.
+        This should either be a HuggingFace model ID (see https://huggingface.co/models)
+        or a path to a saved model checkpoint (a folder containing config.json and pytorch_model.bin).""")
+
     args = parser.parse_args()
 
     tokenizer = AutoTokenizer.from_pretrained(args.model, use_fast=True)
     model = AutoModelForQuestionAnswering.from_pretrained(args.model)
     # Example context and set of questions
-    context = "The Apollo program was a series of space missions conducted by NASA between 1961 and 1972."
-    questions = [
-        "When did the Apollo program start?",
-        "What was the Apollo program?",
-        "Who conducted the Apollo program?"
-    ]
+    qa_pairs = read_json_file(args.questions_path)
+
 
     # Get answers for each question
-    for question in questions:
-        answer = answer_question(tokenizer,question, context, model)
-        print(f"Question: {question}\nAnswer: {answer}\n")
+    for pair in qa_pairs:
+        context = pair["context"] 
+        questions = pair["questions"] 
+        print(context)
+        print('\n')
+        for question in questions:
+            answer = answer_question(tokenizer,question, context, model)
+            print(f"Question: {question}\nAnswer: {answer}\n")
 
+
+def read_json_file(file_path):
+    with open(file_path, 'r') as file:
+        data = json.load(file)
+    return data
 
 
 # Function to answer questions
