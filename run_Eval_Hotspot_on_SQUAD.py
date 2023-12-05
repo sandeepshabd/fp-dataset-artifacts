@@ -9,7 +9,7 @@ import json
 from datasets import load_dataset
 
 NUM_PREPROCESSING_WORKERS = 1
-tokenizer = None
+
 
 
 def main():
@@ -34,11 +34,11 @@ def main():
     model = AutoModelForQuestionAnswering.from_pretrained(args.model)
     hotpotqa_dataset = load_dataset("hotpot_qa", "distractor")
     
-    tokenized_hotpotqa = hotpotqa_dataset.map(preprocess_function, batched=True)
+    tokenized_hotpotqa = hotpotqa_dataset.map(lambda x: preprocess_function(x, tokenizer), batched=True)
     accuracy = evaluate(tokenized_hotpotqa["validation"], model)
     print(f"Model Accuracy on HotpotQA: {accuracy * 100:.2f}%")
     
-def preprocess_function(examples):
+def preprocess_function(examples, tokenizer):
      
     questions = [q.strip() for q in examples["question"]]
     concatenated_contexts = []
