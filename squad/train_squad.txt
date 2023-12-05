@@ -1,0 +1,39 @@
+
+DatasetDict({
+    train: Dataset({
+        features: ['id', 'title', 'context', 'question', 'answers'],
+        num_rows: 87599
+    })
+    validation: Dataset({
+        features: ['id', 'title', 'context', 'question', 'answers'],
+        num_rows: 10570
+    })
+})
+Some weights of ElectraForQuestionAnswering were not initialized from the model checkpoint at google/electra-small-discriminator and are newly initialized: ['qa_outputs.weight', 'qa_outputs.bias']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Preprocessing data... (this takes a little bit, should only happen once per dataset)
+
+
+------------dataset display --2-----
+['id', 'title', 'context', 'question', 'answers']
+Map (num_proc=2): 100% 87599/87599 [01:18<00:00, 1121.89 examples/s]
+/content/fp-dataset-artifacts/run.py:145: FutureWarning: load_metric is deprecated and will be removed in the next major version of datasets. Use 'evaluate.load' instead, from the new library 🤗 Evaluate: https://huggingface.co/docs/evaluate
+  metric = datasets.load_metric('squad')
+Downloading builder script: 4.50kB [00:00, 12.9MB/s]       
+Downloading extra modules: 3.30kB [00:00, 9.27MB/s]       
+  0% 0/6579 [00:00<?, ?it/s]You're using a ElectraTokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+{'loss': 2.7579, 'learning_rate': 4.620003039975681e-05, 'epoch': 0.23}
+{'loss': 1.5676, 'learning_rate': 4.240006079951361e-05, 'epoch': 0.46}
+{'loss': 1.3708, 'learning_rate': 3.860009119927041e-05, 'epoch': 0.68}
+{'loss': 1.3039, 'learning_rate': 3.4800121599027206e-05, 'epoch': 0.91}
+{'loss': 1.1669, 'learning_rate': 3.100015199878401e-05, 'epoch': 1.14}
+{'loss': 1.0983, 'learning_rate': 2.7200182398540814e-05, 'epoch': 1.37}
+{'loss': 1.0857, 'learning_rate': 2.3400212798297615e-05, 'epoch': 1.6}
+{'loss': 1.0693, 'learning_rate': 1.9600243198054416e-05, 'epoch': 1.82}
+{'loss': 1.0134, 'learning_rate': 1.580027359781122e-05, 'epoch': 2.05}
+{'loss': 0.9285, 'learning_rate': 1.200030399756802e-05, 'epoch': 2.28}
+{'loss': 0.9331, 'learning_rate': 8.200334397324822e-06, 'epoch': 2.51}
+{'loss': 0.9281, 'learning_rate': 4.400364797081624e-06, 'epoch': 2.74}
+{'loss': 0.9285, 'learning_rate': 6.003951968384252e-07, 'epoch': 2.96}
+{'train_runtime': 4632.6018, 'train_samples_per_second': 56.802, 'train_steps_per_second': 1.42, 'train_loss': 1.2388881028722278, 'epoch': 3.0}
+100% 6579/6579 [1:17:12<00:00,  1.42it/s]
