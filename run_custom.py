@@ -1,6 +1,6 @@
 from transformers import AutoTokenizer, AutoModelForQuestionAnswering
 import torch
-
+import argparse
 import datasets
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, \
     AutoModelForQuestionAnswering, Trainer, TrainingArguments, HfArgumentParser
@@ -11,26 +11,14 @@ import json
 
 def main():
 # Load the ELECTRA-small model and tokenizer
-    argp = HfArgumentParser(TrainingArguments)
+    parser = argparse.ArgumentParser(description='Example Python script with arguments.')
     
-    argp.add_argument('--model', type=str,
+    parser.add_argument('--model', type=str,
                       default='google/electra-small-discriminator',
                       help="""This argument specifies the base model to fine-tune.
         This should either be a HuggingFace model ID (see https://huggingface.co/models)
         or a path to a saved model checkpoint (a folder containing config.json and pytorch_model.bin).""")
-    argp.add_argument('--task', type=str, choices=['nli', 'qa'], required=True,
-                      help="""This argument specifies which task to train/evaluate on.
-        Pass "nli" for natural language inference or "qa" for question answering.
-        By default, "nli" will use the SNLI dataset, and "qa" will use the SQuAD dataset.""")
-    argp.add_argument('--dataset', type=str, default=None,
-                      help="""This argument overrides the default dataset used for the specified task.""")
-    argp.add_argument('--max_length', type=int, default=128,
-                      help="""This argument limits the maximum sequence length used during training/evaluation.
-        Shorter sequence lengths need less memory and computation time, but some examples may end up getting truncated.""")
-    argp.add_argument('--max_train_samples', type=int, default=None,
-                      help='Limit the number of examples to train on.')
-    argp.add_argument('--max_eval_samples', type=int, default=None,
-                      help='Limit the number of examples to evaluate on.')
+    
 
     training_args, args = argp.parse_args_into_dataclasses()
     tokenizer = AutoTokenizer.from_pretrained(args.model, use_fast=True)
