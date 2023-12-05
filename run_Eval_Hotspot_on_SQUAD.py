@@ -35,7 +35,7 @@ def main():
     hotpotqa_dataset = load_dataset("hotpot_qa", "distractor")
     
     tokenized_hotpotqa = hotpotqa_dataset.map(lambda x: preprocess_function(x, tokenizer), batched=True)
-    accuracy = evaluate(tokenized_hotpotqa["validation"], model)
+    accuracy = evaluate(tokenized_hotpotqa["validation"], model, tokenizer)
     print(f"Model Accuracy on HotpotQA: {accuracy * 100:.2f}%")
     
 def preprocess_function(examples, tokenizer):
@@ -56,7 +56,7 @@ def preprocess_function(examples, tokenizer):
 
 import torch
 
-def evaluate(dataset, model ):
+def evaluate(dataset, model, tokenizer ):
     model.eval()
     correct_predictions = 0
     total_predictions = len(dataset)
