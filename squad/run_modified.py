@@ -39,9 +39,6 @@ def main():
         By default, "nli" will use the SNLI dataset, and "qa" will use the SQuAD dataset.""")
     argp.add_argument('--dataset', type=str, default=None,
                       help="""This argument overrides the default dataset used for the specified task.""")
-    argp.add_argument('--subtype', type=str, default=None,
-                      help="""This argument provides subtype for dataset""")
-
     argp.add_argument('--max_length', type=int, default=128,
                       help="""This argument limits the maximum sequence length used during training/evaluation.
         Shorter sequence lengths need less memory and computation time, but some examples may end up getting truncated.""")
@@ -49,35 +46,24 @@ def main():
                       help='Limit the number of examples to train on.')
     argp.add_argument('--max_eval_samples', type=int, default=None,
                       help='Limit the number of examples to evaluate on.')
-    
-    
+    argp.add_argument('--load_data_from_disk', type=str, default="no",
+                      help='load dataset from disk to evaluate')
 
     training_args, args = argp.parse_args_into_dataclasses()
 
     # Dataset selection
-    # IMPORTANT: this code path allows you to load custom datasets different from the standard SQuAD or SNLI ones.
-    # You need to format the dataset appropriately. For SNLI, you can prepare a file with each line containing one
-    # example as follows:
-    # {"premise": "Two women are embracing.", "hypothesis": "The sisters are hugging.", "label": 1}
-    if args.dataset.endswith('.json') or args.dataset.endswith('.jsonl'):
-        dataset_id = None
-        # Load from local json/jsonl file
-        dataset = datasets.load_dataset('json', data_files=args.dataset)
-        # By default, the "json" dataset loader places all examples in the train split,
-        # so if we want to use a jsonl file for evaluation we need to get the "train" split
-        # from the loaded dataset
-        eval_split = 'train'
-    else:
-        default_datasets = {'qa': ('squad',), 'nli': ('snli',)}
-        dataset_id = tuple(args.dataset.split(':')) if args.dataset is not None else \
-            default_datasets[args.task]
-        # MNLI has two validation splits (one with matched domains and one with mismatched domains). Most datasets just have one "validation" split
-        eval_split = 'validation_matched' if dataset_id == ('glue', 'mnli') else 'validation'
-        # Load the raw data
-        dataset = datasets.load_dataset(*dataset_id)
-    
+    default_datasets = {'qa': ('squad',), 'nli': ('snli',)}
+    dataset_id = tuple(args.dataset.split(':')) if args.dataset is not None else \
+        default_datasets[args.task]
     # NLI models need to have the output label count specified (label 0 is "entailed", 1 is "neutral", and 2 is "contradiction")
     task_kwargs = {'num_labels': 3} if args.task == 'nli' else {}
+    # MNLI has two validation splits (one with matched domains and one with mismatched domains). Most datasets just have one "validation" split
+    eval_split = 'validation_matched' if dataset_id == ('glue', 'mnli') else 'validation'
+    # Load the raw data
+    if args.load_data_from_disk == "yes":
+        dataset = datasets.load_from_disk('data/eval/')
+    else:
+        dataset = datasets.load_dataset(*dataset_id)
 
     # Here we select the right model fine-tuning head
     model_classes = {'qa': AutoModelForQuestionAnswering,
@@ -118,7 +104,10 @@ def main():
             remove_columns=train_dataset.column_names
         )
     if training_args.do_eval:
-        eval_dataset = dataset[eval_split]
+        if args.load_data_from_disk == "no":
+            eval_dataset = dataset[eval_split]
+        else:
+            eval_dataset = dataset
         if args.max_eval_samples:
             eval_dataset = eval_dataset.select(range(args.max_eval_samples))
         eval_dataset_featurized = eval_dataset.map(
