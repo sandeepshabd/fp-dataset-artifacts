@@ -83,17 +83,7 @@ def answer_question(tokenizer,question, context, model):
     return answer
 
 # Example context and set of questions
-context = "The Apollo program was a series of space missions conducted by NASA between 1961 and 1972."
-questions = [
-    "When did the Apollo program start?",
-    "What was the Apollo program?",
-    "Who conducted the Apollo program?"
-]
 
-# Get answers for each question
-for question in questions:
-    answer = answer_question(question, context)
-    print(f"Question: {question}\nAnswer: {answer}\n")
     
 def main():
         argp = HfArgumentParser(TrainingArguments)
