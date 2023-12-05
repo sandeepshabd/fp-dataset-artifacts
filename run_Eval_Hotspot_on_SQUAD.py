@@ -44,7 +44,12 @@ def preprocess_function(examples):
     concatenated_contexts = []
     for context_set in examples["context"]:
         # Each context_set is a list of (title, context) pairs
-        full_context = " ".join([context for title, context in context_set])
+        full_context = ""
+        sentences = context_set["sentences"]
+        
+        for sentencelist in sentences:
+             full_context = " ".join(sentencelist)
+        
         concatenated_contexts.append(full_context)
         
     return tokenizer(questions, concatenated_contexts, truncation=True, padding='max_length', max_length=512)
