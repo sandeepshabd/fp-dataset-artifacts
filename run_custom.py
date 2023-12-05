@@ -12,7 +12,7 @@ def main():
     parser = argparse.ArgumentParser(description='Example Python script with arguments.')
     
     parser.add_argument('model', type=str,
-                      default='google/electra-small-discriminator',
+                      default='./trained_model_SQuAD/',
                       help="""This argument specifies the base model to fine-tune.
         This should either be a HuggingFace model ID (see https://huggingface.co/models)
         or a path to a saved model checkpoint (a folder containing config.json and pytorch_model.bin).""")
