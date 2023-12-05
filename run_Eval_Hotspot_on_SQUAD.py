@@ -1,4 +1,3 @@
-
 import argparse
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, \
     AutoModelForQuestionAnswering, Trainer, TrainingArguments, HfArgumentParser
@@ -78,8 +77,8 @@ def evaluate(dataset, model, tokenizer ):
         pred_answer = tokenizer.convert_tokens_to_string(
             tokenizer.convert_ids_to_tokens(inputs["input_ids"][0][answer_start:answer_end])
         )
-
-        actual_answer = example["answers"]["text"][0] if example["answers"]["text"] else ""
+        #print(example)
+        actual_answer = example["answer"] if example["answer"] else ""
         if pred_answer.strip().lower() == actual_answer.strip().lower():
             correct_predictions += 1
 
@@ -88,5 +87,3 @@ def evaluate(dataset, model, tokenizer ):
        
 if __name__ == "__main__":
     main()
-
-
