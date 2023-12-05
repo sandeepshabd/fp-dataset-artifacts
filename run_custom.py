@@ -11,7 +11,7 @@ def main():
 # Load the ELECTRA-small model and tokenizer
     parser = argparse.ArgumentParser(description='Example Python script with arguments.')
     
-    parser.add_argument('--model', type=str,
+    parser.add_argument('model', type=str,
                       default='google/electra-small-discriminator',
                       help="""This argument specifies the base model to fine-tune.
         This should either be a HuggingFace model ID (see https://huggingface.co/models)
