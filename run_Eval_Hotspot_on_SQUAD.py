@@ -41,8 +41,13 @@ def main():
 def preprocess_function(examples):
      
     questions = [q.strip() for q in examples["question"]]
-    contexts = [c.strip() for c in examples["context"]]
-    return tokenizer(questions, contexts, truncation=True, padding='max_length', max_length=512)
+    concatenated_contexts = []
+    for context_set in examples["context"]:
+        # Each context_set is a list of (title, context) pairs
+        full_context = " ".join([context for title, context in context_set])
+        concatenated_contexts.append(full_context)
+        
+    return tokenizer(questions, concatenated_contexts, truncation=True, padding='max_length', max_length=512)
 
 import torch
 
