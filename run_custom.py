@@ -11,15 +11,15 @@ def main():
 # Load the ELECTRA-small model and tokenizer
     parser = argparse.ArgumentParser(description='Example Python script with arguments.')
     
-    parser.add_argument('model', type=str,
+    parser.add_argument('--model', type=str,
                       default='./trained_model_SQuAD/',
                       help="""This argument specifies the base model to fine-tune.
         This should either be a HuggingFace model ID (see https://huggingface.co/models)
         or a path to a saved model checkpoint (a folder containing config.json and pytorch_model.bin).""")
-    
+    args = parser.parse_args()
 
-    tokenizer = AutoTokenizer.from_pretrained(parser.model, use_fast=True)
-    model = AutoModelForQuestionAnswering.from_pretrained(parser.model)
+    tokenizer = AutoTokenizer.from_pretrained(args.model, use_fast=True)
+    model = AutoModelForQuestionAnswering.from_pretrained(args.model)
     # Example context and set of questions
     context = "The Apollo program was a series of space missions conducted by NASA between 1961 and 1972."
     questions = [
