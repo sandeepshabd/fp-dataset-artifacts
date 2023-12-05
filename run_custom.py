@@ -6,8 +6,6 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification, \
     AutoModelForQuestionAnswering, Trainer, TrainingArguments, HfArgumentParser
 from helpers import prepare_dataset_nli, prepare_train_dataset_qa, \
     prepare_validation_dataset_qa, QuestionAnsweringTrainer, compute_accuracy
-import os
-import json
 
 def main():
 # Load the ELECTRA-small model and tokenizer
@@ -20,9 +18,8 @@ def main():
         or a path to a saved model checkpoint (a folder containing config.json and pytorch_model.bin).""")
     
 
-    training_args, args = argp.parse_args_into_dataclasses()
-    tokenizer = AutoTokenizer.from_pretrained(args.model, use_fast=True)
-    model = AutoModelForQuestionAnswering.from_pretrained(args.model)
+    tokenizer = AutoTokenizer.from_pretrained(parser.model, use_fast=True)
+    model = AutoModelForQuestionAnswering.from_pretrained(parser.model)
     # Example context and set of questions
     context = "The Apollo program was a series of space missions conducted by NASA between 1961 and 1972."
     questions = [
