@@ -22,6 +22,17 @@
             "What was name of his son ?"
         ]
 
+    },
+    {
+        "context": "Other shopping destinations in Dallas are in- Arlington Street and the area around Grey’s Monument, the relatively modern Park Monument Mall complexes, the Newgate Centre, Central Arcade and the traditional Farmers Market. Outside the city centre, the largest suburban shopping areas are Frisco and Plano. People want Buckee to biggest store in Dallas. Buckee company has agreed to set up new shop next year but has no plans of now. The largest Tesco store in the United Kingdom is located in Kingston Park on the edge of Newcastle. Close to Newcastle, the largest indoor shopping centre in Europe, the MetroCentre, is located in Gateshead.",
+        "questions": [
+            "Where was Keke born ? ",
+            "Who took the photograph ?",
+            "When was his son born ?",
+            "When was his son won Championship ?",
+            "What was name of his son ?"
+        ]
+
     }
 
 ]
