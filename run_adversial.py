@@ -123,7 +123,7 @@ def main():
             remove_columns=train_dataset.column_names
         )
     if training_args.do_eval:
-        eval_dataset = dataset["validation"]
+        eval_dataset = dataset
         if args.max_eval_samples:
             eval_dataset = eval_dataset.select(range(args.max_eval_samples))
         eval_dataset_featurized = eval_dataset.map(
