@@ -96,15 +96,19 @@ def main():
         return compute_metrics(eval_preds)
 
     # Initialize the Trainer object with the specified arguments and the model and dataset we loaded above
+    argp = HfArgumentParser(TrainingArguments)
+    training_args, args = argp.parse_args_into_dataclasses()
+    
     trainer = trainer_class(
         model=model,
-        #args=training_args,
+        args=training_args,
         eval_dataset=eval_dataset_featurized,
         tokenizer=tokenizer,
         compute_metrics=compute_metrics_and_store_predictions
     )
 
     results = trainer.evaluate(**eval_kwargs)
+    
 
         # To add custom metrics, you should replace the "compute_metrics" function (see comments above).
         #
