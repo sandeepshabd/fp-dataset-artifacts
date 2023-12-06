@@ -84,7 +84,7 @@ def main():
         adversarial_dataset = datasets.load_dataset('adversarial_qa', 'adversarialQA',split='train')
     else:
         print('---running validation---')
-        squad_dataset = datasets.load_dataset('squad', split='validation[:30000]')
+        squad_dataset = datasets.load_dataset('squad', split='validation')
         adversarial_dataset = datasets.load_dataset('adversarial_qa', 'adversarialQA',split='validation')
 
     adversarial_dataset = adversarial_dataset.remove_columns("metadata")
