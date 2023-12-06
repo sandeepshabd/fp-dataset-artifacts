@@ -39,8 +39,6 @@ def main():
         By default, "nli" will use the SNLI dataset, and "qa" will use the SQuAD dataset.""")
     argp.add_argument('--dataset', type=str, default=None,
                       help="""This argument overrides the default dataset used for the specified task.""")
-    argp.add_argument('--subset', type=str, default=None,
-                      help="""subset, if any""")
     argp.add_argument('--max_length', type=int, default=128,
                       help="""This argument limits the maximum sequence length used during training/evaluation.
         Shorter sequence lengths need less memory and computation time, but some examples may end up getting truncated.""")
@@ -56,6 +54,9 @@ def main():
     # You need to format the dataset appropriately. For SNLI, you can prepare a file with each line containing one
     # example as follows:
     # {"premise": "Two women are embracing.", "hypothesis": "The sisters are hugging.", "label": 1}
+    
+    
+    """
     if args.dataset.endswith('.json') or args.dataset.endswith('.jsonl'):
         dataset_id = None
         # Load from local json/jsonl file
@@ -65,19 +66,21 @@ def main():
         # from the loaded dataset
         eval_split = 'train'
     else:
-        print(args.dataset,args.subset)
+        default_datasets = {'qa': ('squad',), 'nli': ('snli',)}
+        dataset_id = tuple(args.dataset.split(':')) if args.dataset is not None else \
+            default_datasets[args.task]
         # MNLI has two validation splits (one with matched domains and one with mismatched domains). Most datasets just have one "validation" split
-        eval_split =  'validation'
+        eval_split = 'validation_matched' if dataset_id == ('glue', 'mnli') else 'validation'
         # Load the raw data
-        if(args.subset):
-            
-            dataset = datasets.load_dataset(args.dataset,args.subset )
-        else:
-            dataset = datasets.load_dataset(args.dataset )
-    
+        dataset = datasets.load_dataset(*dataset_id)
+    """
     # NLI models need to have the output label count specified (label 0 is "entailed", 1 is "neutral", and 2 is "contradiction")
-    task_kwargs = {'num_labels': 3} if args.task == 'nli' else {}
+    task_kwargs =  {}
+    #dataset = datasets.load_dataset(*dat)
 
+    adversarial_dataset = datasets.load_dataset('adversarial_qa', 'adversarialQA',split='train')
+    dataset = adversarial_dataset.remove_columns("metadata")
+ 
     # Here we select the right model fine-tuning head
     model_classes = {'qa': AutoModelForQuestionAnswering,
                      'nli': AutoModelForSequenceClassification}
@@ -105,7 +108,7 @@ def main():
     train_dataset_featurized = None
     eval_dataset_featurized = None
     if training_args.do_train:
-        train_dataset = dataset['train']
+        train_dataset = dataset
         if args.max_train_samples:
             train_dataset = train_dataset.select(range(args.max_train_samples))
         train_dataset_featurized = train_dataset.map(
@@ -115,7 +118,7 @@ def main():
             remove_columns=train_dataset.column_names
         )
     if training_args.do_eval:
-        eval_dataset = dataset[eval_split]
+        eval_dataset = dataset["validation"]
         if args.max_eval_samples:
             eval_dataset = eval_dataset.select(range(args.max_eval_samples))
         eval_dataset_featurized = eval_dataset.map(
@@ -136,7 +139,6 @@ def main():
         # to enable the question-answering specific evaluation metrics
         trainer_class = QuestionAnsweringTrainer
         eval_kwargs['eval_examples'] = eval_dataset
-        eval_kwargs['ignore_keys']=['metadata']
         metric = datasets.load_metric('squad')
         compute_metrics = lambda eval_preds: metric.compute(
             predictions=eval_preds.predictions, references=eval_preds.label_ids)
