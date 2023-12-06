@@ -9,6 +9,7 @@ from tqdm.auto import tqdm
 QA_MAX_ANSWER_LENGTH = 30
 
 def hotpotqa_to_squad(hotpotqa_data):
+    print('------in hotpotqa_to_squad-------')
     squad_formatted_data = {"data": [], "version": "Converted from HotpotQA"}
 
     for article in hotpotqa_data:
