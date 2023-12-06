@@ -79,9 +79,11 @@ def main():
     #dataset = datasets.load_dataset(*dat)
     
     if training_args.do_train:
+        print('---running train---')
         squad_dataset = datasets.load_dataset('squad', split='train[:30000]')
         adversarial_dataset = datasets.load_dataset('adversarial_qa', 'adversarialQA',split='train')
     else:
+         print('---running validation---')
         squad_dataset = datasets.load_dataset('squad', split='validation[:30000]')
         adversarial_dataset = datasets.load_dataset('adversarial_qa', 'adversarialQA',split='validation')
 
