@@ -80,7 +80,7 @@ def main():
     squad_dataset = datasets.load_dataset('squad')
     adversarial_dataset = datasets.load_dataset('adversarial_qa', 'adversarialQA')
     adversarial_dataset = adversarial_dataset.remove_columns("metadata")
-    dataset = (datasets.concatenate_datasets(squad_dataset,adversarial_dataset))
+    dataset = (datasets.concatenate_datasets([squad_dataset,adversarial_dataset])).shuffle(seed=42)
 
     # Here we select the right model fine-tuning head
     model_classes = {'qa': AutoModelForQuestionAnswering,
@@ -121,7 +121,7 @@ def main():
             remove_columns=train_dataset.column_names
         )
     if training_args.do_eval:
-        eval_dataset = dataset[eval_split]
+        eval_dataset = dataset["validation"]
         if args.max_eval_samples:
             eval_dataset = eval_dataset.select(range(args.max_eval_samples))
         eval_dataset_featurized = eval_dataset.map(
