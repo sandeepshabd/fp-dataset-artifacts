@@ -26,15 +26,15 @@ def preprocess_function(examples, tokenizer):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Example Python script with arguments.')
- 
-    parser.add_argument('--model', type=str,
+    argp = HfArgumentParser(TrainingArguments)
+    
+    argp.add_argument('--model', type=str,
                       default='./trained_model_SQuAD/',
                       help="""This argument specifies the base model to fine-tune.
         This should either be a HuggingFace model ID (see https://huggingface.co/models)
         or a path to a saved model checkpoint (a folder containing config.json and pytorch_model.bin).""")
  
-    args = parser.parse_args()
+    training_args, args = argp.parse_args_into_dataclasses()
     dataset = datasets.load_dataset("hotpot_qa", "distractor")
 
     model_class = AutoModelForQuestionAnswering
@@ -96,7 +96,7 @@ def main():
         return compute_metrics(eval_preds)
 
     # Initialize the Trainer object with the specified arguments and the model and dataset we loaded above
-    argp = HfArgumentParser(TrainingArguments)
+    
     training_args, args = argp.parse_args_into_dataclasses()
     args.output_dir ="eval_hotspot_onSquad_model"
     training_args.output_dir ="train_hotspot_onSquad_model"
