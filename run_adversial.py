@@ -84,7 +84,7 @@ def main():
         print('adversarial_qa -- training data data')
         adversarial_dataset = datasets.load_dataset('adversarial_qa', 'adversarialQA',split='train')
     #dataset = adversarial_dataset.remove_columns("metadata")
- 
+    dataset = adversarial_dataset
     # Here we select the right model fine-tuning head
     model_classes = {'qa': AutoModelForQuestionAnswering,
                      'nli': AutoModelForSequenceClassification}
