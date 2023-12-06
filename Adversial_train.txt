@@ -1,0 +1,29 @@
+Preprocessing data... (this takes a little bit, should only happen once per dataset)
+Map (num_proc=2): 100% 30000/30000 [00:25<00:00, 1155.18 examples/s]
+/content/fp-dataset-artifacts/run_adversial.py:142: FutureWarning: load_metric is deprecated and will be removed in the next major version of datasets. Use 'evaluate.load' instead, from the new library 🤗 Evaluate: https://huggingface.co/docs/evaluate
+  metric = datasets.load_metric('squad')
+  0% 0/11271 [00:00<?, ?it/s]You're using a ElectraTokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+{'loss': 4.1685, 'learning_rate': 4.778191819714311e-05, 'epoch': 0.13}
+{'loss': 3.7871, 'learning_rate': 4.5563836394286225e-05, 'epoch': 0.27}
+{'loss': 3.4729, 'learning_rate': 4.334575459142933e-05, 'epoch': 0.4}
+{'loss': 3.2696, 'learning_rate': 4.112767278857245e-05, 'epoch': 0.53}
+{'loss': 3.1294, 'learning_rate': 3.8909590985715555e-05, 'epoch': 0.67}
+{'loss': 3.0303, 'learning_rate': 3.669150918285866e-05, 'epoch': 0.8}
+{'loss': 2.9615, 'learning_rate': 3.447342738000178e-05, 'epoch': 0.93}
+{'loss': 2.8169, 'learning_rate': 3.2255345577144885e-05, 'epoch': 1.06}
+{'loss': 2.6501, 'learning_rate': 3.0037263774288e-05, 'epoch': 1.2}
+{'loss': 2.6722, 'learning_rate': 2.7819181971431107e-05, 'epoch': 1.33}
+{'loss': 2.5883, 'learning_rate': 2.5601100168574215e-05, 'epoch': 1.46}
+{'loss': 2.6416, 'learning_rate': 2.338301836571733e-05, 'epoch': 1.6}
+{'loss': 2.5627, 'learning_rate': 2.116493656286044e-05, 'epoch': 1.73}
+{'loss': 2.4856, 'learning_rate': 1.8946854760003548e-05, 'epoch': 1.86}
+{'loss': 2.513, 'learning_rate': 1.672877295714666e-05, 'epoch': 2.0}
+{'loss': 2.2526, 'learning_rate': 1.451069115428977e-05, 'epoch': 2.13}
+{'loss': 2.2138, 'learning_rate': 1.229260935143288e-05, 'epoch': 2.26}
+{'loss': 2.2652, 'learning_rate': 1.0074527548575991e-05, 'epoch': 2.4}
+{'loss': 2.225, 'learning_rate': 7.856445745719102e-06, 'epoch': 2.53}
+{'loss': 2.1984, 'learning_rate': 5.638363942862213e-06, 'epoch': 2.66}
+{'loss': 2.1984, 'learning_rate': 3.4202821400053237e-06, 'epoch': 2.79}
+{'loss': 2.1622, 'learning_rate': 1.202200337148434e-06, 'epoch': 2.93}
+{'train_runtime': 1740.3106, 'train_samples_per_second': 51.801, 'train_steps_per_second': 6.476, 'train_loss': 2.7254956925457896, 'epoch': 3.0}
+100% 11271/11271 [29:00<00:00,  6.48it/s]
