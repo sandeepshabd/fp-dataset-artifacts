@@ -1,0 +1,15 @@
+Preprocessing data... (this takes a little bit, should only happen once per dataset)
+/content/fp-dataset-artifacts/run_squad_adversial_limited.py:151: FutureWarning: load_metric is deprecated and will be removed in the next major version of datasets. Use 'evaluate.load' instead, from the new library 🤗 Evaluate: https://huggingface.co/docs/evaluate
+  metric = datasets.load_metric('squad')
+  0% 0/4506 [00:00<?, ?it/s]You're using a ElectraTokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+{'loss': 3.3525, 'learning_rate': 4.4451841988459835e-05, 'epoch': 0.33}
+{'loss': 2.4563, 'learning_rate': 3.890368397691966e-05, 'epoch': 0.67}
+{'loss': 2.2438, 'learning_rate': 3.3355525965379494e-05, 'epoch': 1.0}
+{'loss': 2.0048, 'learning_rate': 2.7807367953839327e-05, 'epoch': 1.33}
+{'loss': 1.9442, 'learning_rate': 2.225920994229916e-05, 'epoch': 1.66}
+{'loss': 1.9238, 'learning_rate': 1.671105193075899e-05, 'epoch': 2.0}
+{'loss': 1.7475, 'learning_rate': 1.116289391921882e-05, 'epoch': 2.33}
+{'loss': 1.7374, 'learning_rate': 5.614735907678651e-06, 'epoch': 2.66}
+{'loss': 1.7502, 'learning_rate': 6.657789613848203e-08, 'epoch': 3.0}
+{'train_runtime': 3251.9566, 'train_samples_per_second': 55.42, 'train_steps_per_second': 1.386, 'train_loss': 2.1285037935124045, 'epoch': 3.0}
+100% 4506/4506 [54:11<00:00,  1.39it/s]
