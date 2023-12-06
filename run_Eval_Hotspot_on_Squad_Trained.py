@@ -98,6 +98,8 @@ def main():
     # Initialize the Trainer object with the specified arguments and the model and dataset we loaded above
     argp = HfArgumentParser(TrainingArguments)
     training_args, args = argp.parse_args_into_dataclasses()
+    args.output_dir ="eval_hotspot_onSquad_model"
+    training_args.output_dir ="train_hotspot_onSquad_model"
     
     trainer = trainer_class(
         model=model,
