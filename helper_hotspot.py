@@ -8,6 +8,45 @@ from tqdm.auto import tqdm
 
 QA_MAX_ANSWER_LENGTH = 30
 
+def hotpotqa_to_squad(hotpotqa_data):
+    squad_formatted_data = {"data": [], "version": "Converted from HotpotQA"}
+
+    for article in hotpotqa_data:
+        # In HotpotQA, each 'article' contains multiple supporting contexts (paragraphs)
+        # We concatenate these for simplicity
+        context = ' '.join([context for _, context in article['context']])
+
+        # Each article has associated questions
+        for idx, question in enumerate(article['question']):
+            answers = article['answer']
+            qas = {
+                "question": question,
+                "id": article['id'] + f'_{idx}',
+                "answers": [
+                    {
+                        "text": answer,
+                        "answer_start": context.index(answer) if answer in context else -1
+                    } for answer in answers
+                ]
+            }
+
+            squad_formatted_article = {
+                "title": article.get('title', 'No Title'),  # HotpotQA might not have title
+                "paragraphs": [
+                    {
+                        "context": context,
+                        "qas": [qas]
+                    }
+                ]
+            }
+
+            squad_formatted_data["data"].append(squad_formatted_article)
+    
+    return squad_formatted_data
+
+# Convert the validation split
+
+
 
 # This function preprocesses an NLI dataset, tokenizing premises and hypotheses.
 def prepare_dataset_nli(examples, tokenizer, max_seq_length=None):
@@ -35,16 +74,7 @@ def compute_accuracy(eval_preds: EvalPrediction):
             np.float32).mean().item()
     }
 
-def getContext(examples):
-    for context_set in examples["context"]:
-    # Each context_set is a list of (title, context) pairs
-        full_context = ""
-        sentences = context_set["sentences"]
-        
-        for sentencelist in sentences:
-                full_context = " ".join(sentencelist)
-    return full_context
-    
+
 # This function preprocesses a question answering dataset, tokenizing the question and context text
 # and finding the right offsets for the answer spans in the tokenized context (to use as labels).
 # Adapted from https://github.com/huggingface/transformers/blob/master/examples/pytorch/question-answering/run_qa.py
@@ -56,7 +86,7 @@ def prepare_train_dataset_qa(examples, tokenizer, max_seq_length=None):
     # chunks of max_length
     tokenized_examples = tokenizer(
         questions,
-        getContext(examples),
+        examples["context"],
         truncation="only_second",
         max_length=max_seq_length,
         stride=min(max_seq_length // 2, 128),
@@ -129,7 +159,7 @@ def prepare_validation_dataset_qa(examples, tokenizer):
     max_seq_length = tokenizer.model_max_length
     tokenized_examples = tokenizer(
         questions,
-        getContext(examples),
+        examples["context"],
         truncation="only_second",
         max_length=max_seq_length,
         stride=min(max_seq_length // 2, 128),
@@ -244,7 +274,7 @@ def postprocess_qa_predictions(examples,
                              reverse=True)[:n_best_size]
 
         # Use the offsets to gather the answer text in the original context.
-        context = getContext(example)
+        context = example["context"]
         for pred in predictions:
             offsets = pred.pop("offsets")
             pred["text"] = context[offsets[0]: offsets[1]]
@@ -300,7 +330,7 @@ class QuestionAnsweringTrainer(Trainer):
                                                     output.predictions)
             formatted_predictions = [{"id": k, "prediction_text": v}
                                      for k, v in eval_preds.items()]
-            references = [{"id": ex["id"], "answers": ex['answer']}
+            references = [{"id": ex["id"], "answers": ex['answers']}
                           for ex in eval_examples]
 
             # compute the metrics according to the predictions and references
