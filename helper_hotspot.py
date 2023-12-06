@@ -244,7 +244,7 @@ def postprocess_qa_predictions(examples,
                              reverse=True)[:n_best_size]
 
         # Use the offsets to gather the answer text in the original context.
-        context = example["context"]
+        context = getContext(example)
         for pred in predictions:
             offsets = pred.pop("offsets")
             pred["text"] = context[offsets[0]: offsets[1]]
@@ -300,7 +300,7 @@ class QuestionAnsweringTrainer(Trainer):
                                                     output.predictions)
             formatted_predictions = [{"id": k, "prediction_text": v}
                                      for k, v in eval_preds.items()]
-            references = [{"id": ex["id"], "answers": ex['answers']}
+            references = [{"id": ex["id"], "answers": ex['answer']}
                           for ex in eval_examples]
 
             # compute the metrics according to the predictions and references

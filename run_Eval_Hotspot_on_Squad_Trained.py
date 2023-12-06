@@ -9,20 +9,6 @@ import json
 
 NUM_PREPROCESSING_WORKERS = 1
 
-def preprocess_function(examples, tokenizer):
-     
-    questions = [q.strip() for q in examples["question"]]
-    concatenated_contexts = []
-    for context_set in examples["context"]:
-        # Each context_set is a list of (title, context) pairs
-        full_context = ""
-        sentences = context_set["sentences"]
-        
-        for sentencelist in sentences:
-             full_context = " ".join(sentencelist)
-        
-        concatenated_contexts.append(full_context)
-        
 
 
 def main():
@@ -44,7 +30,7 @@ def main():
 
     # Select the dataset preprocessing function (these functions are defined in helpers.py)
     #prepare_train_dataset = lambda exs: prepare_train_dataset_qa(exs, tokenizer)
-    prepare_train_dataset = lambda exs: prepare_train_dataset_qa(exs, tokenizer)
+
     prepare_eval_dataset = lambda exs: prepare_validation_dataset_qa(exs, tokenizer)
 
     """
@@ -82,7 +68,7 @@ def main():
 
     trainer_class = QuestionAnsweringTrainer
     eval_kwargs['eval_examples'] = eval_dataset
-    eval_kwargs['ignore_keys'] = ['type','level']
+    eval_kwargs['ignore_keys'] = ['type','level','supporting_facts']
     metric = datasets.load_dataset("hotpot_qa", "distractor")
     compute_metrics = lambda eval_preds: metric.compute(
         predictions=eval_preds.predictions, references=eval_preds.label_ids)
