@@ -80,7 +80,7 @@ def main():
     squad_dataset = datasets.load_dataset('squad')
     adversarial_dataset = datasets.load_dataset('adversarial_qa', 'adversarialQA')
     adversarial_dataset = adversarial_dataset.remove_columns("metadata")
-    dataset = datasets.concatenate_datasets(squad_dataset,adversarial_dataset).shuffle(seed=42)
+    dataset = (datasets.concatenate_datasets(squad_dataset,adversarial_dataset)).shuffle(seed=42)
 
     # Here we select the right model fine-tuning head
     model_classes = {'qa': AutoModelForQuestionAnswering,
