@@ -44,7 +44,8 @@ def main():
 
     # Select the dataset preprocessing function (these functions are defined in helpers.py)
     #prepare_train_dataset = lambda exs: prepare_train_dataset_qa(exs, tokenizer)
-    prepare_eval_dataset = lambda exs: preprocess_function(exs, tokenizer)
+    prepare_train_dataset = lambda exs: prepare_train_dataset_qa(exs, tokenizer)
+    prepare_eval_dataset = lambda exs: prepare_validation_dataset_qa(exs, tokenizer)
 
     """
     train_dataset = None
@@ -81,6 +82,7 @@ def main():
 
     trainer_class = QuestionAnsweringTrainer
     eval_kwargs['eval_examples'] = eval_dataset
+    eval_kwargs['ignore_keys'] = ['type','level']
     metric = datasets.load_dataset("hotpot_qa", "distractor")
     compute_metrics = lambda eval_preds: metric.compute(
         predictions=eval_preds.predictions, references=eval_preds.label_ids)
