@@ -1,0 +1,20 @@
+Preprocessing data... (this takes a little bit, should only happen once per dataset)
+Map (num_proc=2): 100% 87599/87599 [01:16<00:00, 1148.84 examples/s]
+/content/fp-dataset-artifacts/run.py:137: FutureWarning: load_metric is deprecated and will be removed in the next major version of datasets. Use 'evaluate.load' instead, from the new library 🤗 Evaluate: https://huggingface.co/docs/evaluate
+  metric = datasets.load_metric('squad')
+  0% 0/6579 [00:00<?, ?it/s]You're using a ElectraTokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+{'loss': 2.6381, 'learning_rate': 4.620003039975681e-05, 'epoch': 0.23}
+{'loss': 1.5646, 'learning_rate': 4.240006079951361e-05, 'epoch': 0.46}
+{'loss': 1.3646, 'learning_rate': 3.860009119927041e-05, 'epoch': 0.68}
+{'loss': 1.3014, 'learning_rate': 3.4800121599027206e-05, 'epoch': 0.91}
+{'loss': 1.1663, 'learning_rate': 3.100015199878401e-05, 'epoch': 1.14}
+{'loss': 1.0952, 'learning_rate': 2.7200182398540814e-05, 'epoch': 1.37}
+{'loss': 1.0845, 'learning_rate': 2.3400212798297615e-05, 'epoch': 1.6}
+{'loss': 1.0712, 'learning_rate': 1.9600243198054416e-05, 'epoch': 1.82}
+{'loss': 1.0126, 'learning_rate': 1.580027359781122e-05, 'epoch': 2.05}
+{'loss': 0.9304, 'learning_rate': 1.200030399756802e-05, 'epoch': 2.28}
+{'loss': 0.9293, 'learning_rate': 8.200334397324822e-06, 'epoch': 2.51}
+{'loss': 0.9211, 'learning_rate': 4.400364797081624e-06, 'epoch': 2.74}
+{'loss': 0.9271, 'learning_rate': 6.003951968384252e-07, 'epoch': 2.96}
+{'train_runtime': 4764.6478, 'train_samples_per_second': 55.228, 'train_steps_per_second': 1.381, 'train_loss': 1.227774542793892, 'epoch': 3.0}
+100% 6579/6579 [1:19:24<00:00,  1.38it/s]

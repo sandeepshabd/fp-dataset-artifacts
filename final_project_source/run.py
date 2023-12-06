@@ -54,9 +54,6 @@ def main():
     # You need to format the dataset appropriately. For SNLI, you can prepare a file with each line containing one
     # example as follows:
     # {"premise": "Two women are embracing.", "hypothesis": "The sisters are hugging.", "label": 1}
-    
-    
-    """
     if args.dataset.endswith('.json') or args.dataset.endswith('.jsonl'):
         dataset_id = None
         # Load from local json/jsonl file
@@ -73,19 +70,10 @@ def main():
         eval_split = 'validation_matched' if dataset_id == ('glue', 'mnli') else 'validation'
         # Load the raw data
         dataset = datasets.load_dataset(*dataset_id)
-    """
+    
     # NLI models need to have the output label count specified (label 0 is "entailed", 1 is "neutral", and 2 is "contradiction")
-    task_kwargs =  {}
-    #dataset = datasets.load_dataset(*dat)
-    if training_args.do_eval:
-        print('adversarial_qa -- validation data')
-        adversarial_dataset = datasets.load_dataset('adversarial_qa', 'adversarialQA',split='validation')
-    else:
-        print('adversarial_qa -- training data data')
-        adversarial_dataset = datasets.load_dataset('adversarial_qa', 'adversarialQA',split='train')
-    dataset = adversarial_dataset.remove_columns("metadata")
-    print(dataset)
-    dataset = adversarial_dataset
+    task_kwargs = {'num_labels': 3} if args.task == 'nli' else {}
+
     # Here we select the right model fine-tuning head
     model_classes = {'qa': AutoModelForQuestionAnswering,
                      'nli': AutoModelForSequenceClassification}
@@ -106,14 +94,16 @@ def main():
         raise ValueError('Unrecognized task name: {}'.format(args.task))
 
     print("Preprocessing data... (this takes a little bit, should only happen once per dataset)")
-
+    if dataset_id == ('snli',):
+        # remove SNLI examples with no label
+        dataset = dataset.filter(lambda ex: ex['label'] != -1)
     
     train_dataset = None
     eval_dataset = None
     train_dataset_featurized = None
     eval_dataset_featurized = None
     if training_args.do_train:
-        train_dataset = dataset
+        train_dataset = dataset['train']
         if args.max_train_samples:
             train_dataset = train_dataset.select(range(args.max_train_samples))
         train_dataset_featurized = train_dataset.map(
@@ -123,7 +113,7 @@ def main():
             remove_columns=train_dataset.column_names
         )
     if training_args.do_eval:
-        eval_dataset = dataset
+        eval_dataset = dataset[eval_split]
         if args.max_eval_samples:
             eval_dataset = eval_dataset.select(range(args.max_eval_samples))
         eval_dataset_featurized = eval_dataset.map(

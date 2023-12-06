@@ -77,15 +77,11 @@ def main():
     # NLI models need to have the output label count specified (label 0 is "entailed", 1 is "neutral", and 2 is "contradiction")
     task_kwargs =  {}
     #dataset = datasets.load_dataset(*dat)
-    if training_args.do_eval:
-        print('adversarial_qa -- validation data')
-        adversarial_dataset = datasets.load_dataset('adversarial_qa', 'adversarialQA',split='validation')
-    else:
-        print('adversarial_qa -- training data data')
-        adversarial_dataset = datasets.load_dataset('adversarial_qa', 'adversarialQA',split='train')
-    dataset = adversarial_dataset.remove_columns("metadata")
-    print(dataset)
-    dataset = adversarial_dataset
+    squad_dataset = datasets.load_dataset('squad', split='train')
+    adversarial_dataset = datasets.load_dataset('adversarial_qa', 'adversarialQA',split='train')
+    adversarial_dataset = adversarial_dataset.remove_columns("metadata")
+    dataset = (datasets.concatenate_datasets([squad_dataset,adversarial_dataset])).shuffle(seed=42)
+
     # Here we select the right model fine-tuning head
     model_classes = {'qa': AutoModelForQuestionAnswering,
                      'nli': AutoModelForSequenceClassification}
@@ -123,7 +119,7 @@ def main():
             remove_columns=train_dataset.column_names
         )
     if training_args.do_eval:
-        eval_dataset = dataset
+        eval_dataset = dataset["validation"]
         if args.max_eval_samples:
             eval_dataset = eval_dataset.select(range(args.max_eval_samples))
         eval_dataset_featurized = eval_dataset.map(
