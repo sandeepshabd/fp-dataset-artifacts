@@ -80,6 +80,7 @@ def main():
     squad_dataset = datasets.load_dataset('squad')
     adversarial_dataset = datasets.load_dataset('adversarial_qa', 'adversarialQA')
     adversarial_dataset = adversarial_dataset.remove_columns("metadata")
+    dataset = datasets.concatenate_datasets(squad_dataset,adversarial_dataset).shuffle(seed=42)
 
     # Here we select the right model fine-tuning head
     model_classes = {'qa': AutoModelForQuestionAnswering,
@@ -108,8 +109,9 @@ def main():
     train_dataset_featurized = None
     eval_dataset_featurized = None
     if training_args.do_train:
-        train_dataset = datasets.concatenate_datasets(squad_dataset['train'],adversarial_dataset['train']).shuffle(seed=42)
+        #train_dataset = datasets.concatenate_datasets(squad_dataset['train'],adversarial_dataset['train']).shuffle(seed=42)
         #dataset['train']
+        train_dataset = dataset['train']
         if args.max_train_samples:
             train_dataset = train_dataset.select(range(args.max_train_samples))
         train_dataset_featurized = train_dataset.map(
